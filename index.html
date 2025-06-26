@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <meta name="description"
+        content="Machine Learning Modeling for Multi-order Human Visual Motion Perception">
+ 
+  <meta name="keywords" content="Visual motion perception, Optical flow, Second-order motion, Graph neural network, Motion segmentation">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>MotionModel</title>
+
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <link rel="icon" href="./static/images/eye.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+ 
+      <a class="navbar-item" href="xxxx">
+        <span class="icon">
+          <i class="fas fa-home"></i>
+        </span>
+      </a>
+
+  
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">More Research  </a>
+        <div class="navbar-dropdown">
+         
+          <a class="navbar-item" href="https://proceedings.neurips.cc/paper_files/paper/2023/file/4c9477b9e2c7ec0ad3f4f15077aaf85a-Paper-Conference.pdf">Motion Model</a>
+          <a class="navbar-item" href="https://www.cell.com/iscience/pdf/S2589-0042(23)02384-2.pdf">Human perceived flow</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+  
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+        
+          <h1 class="title is-1 publication-title colorful-title">Machine Learning Modeling for Multi-order Human Visual Motion Perception</h1>
+          <div class="is-size-5 publication-authors">
+            <!-- 作者名和链接，可修改成实际作者信息 -->
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=GdLTUlgAAAAJ&hl=en"> Zitang Sun </a><sup>1</sup>,
+              <a href="https://scholar.google.com.tw/citations?user=9RKoQacAAAAJ&hl=en">Yen-Ju Chen </a><sup>1</sup>,
+              <a href="https://scholar.google.com/citations?user=lcYpJsYAAAAJ&hl=en"> Yung-hao Yang </a><sup>1</sup>,
+              Yuan Li </a><sup>1</sup>,
+              <a href="https://scholar.google.com/citations?user=bxhQU8EAAAAJ&hl=en"> Shin'ya Nishida* </a><sup>1</sup>,
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+        
+            <span class="author-block"><sup>1</sup>Cognitive Informatics Lab, Kyoto University, Japan,</span>
+          
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+         
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2501.12810" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                 <a href="https://arxiv.org/abs/2501.12810" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+        
+              <span class="link-block">
+                <a href="javascript:void(0);" onclick="showAlert()" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-youtube"></i></span>
+                  <span>Video</span>
+                </a>
+              </span>
+            
+              <span class="link-block">
+                <a href="https://github.com/anoymized/multi-order-motion-model" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+           
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/sunana/mateiral-controlled-motion-dataset" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="far fa-images"></i></span>
+                  <span>Data</span>
+                </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <style>
+  .colorful-title {
+    padding: 10px 20px; /* 添加内边距 */
+    border: 3px solid linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet); /* 彩色边框 */
+    border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet) 1; /* 渐变边框 */
+    border-radius: 8px; /* 圆角 */
+    background: linear-gradient(to right, #f0f9ff, #e0f7fa); /* 渐变底色 */
+    color: #333; /* 文字颜色 */
+    text-align: center; /* 文本居中 */
+    font-weight: bold; /* 加粗文本 */
+    margin: 20px auto; /* 上下外边距，居中对齐 */
+    display: inline-block; /* 使标题按内容宽度显示 */
+  }
+</style>
+
+<style>
+  /* 标题居中对齐 */
+  .colorful-title {
+    text-align: center;
+    font-size: 2.5em; 
+  }
+
+  /* 为不同颜色定义类 */
+  .word-color-1 { color: #ff5733; }
+  .word-color-2 { color: #33c1ff; }
+  .word-color-3 { color: #9b33ff; }
+  .word-color-4 { color: #33ff57; }
+  .word-color-5 { color: #ffd433; }
+  .word-color-6 { color: #ff33a6; }
+</style>
+
+<script>
+ 
+  document.addEventListener("DOMContentLoaded", function() {
+    const title = document.querySelector(".colorful-title");
+    const words = title.innerText.split(" ");
+    title.innerHTML = words.map((word, index) => {
+      const colorClass = `word-color-${(index % 6) + 1}`; 
+      return `<span class="${colorClass}">${word}</span>`;
+    }).join(" ");
+  });
+</script>
+
+
+<!-- JavaScript，用于显示提示信息 -->
+<script>
+  function showAlert() {
+    alert("Not available currently. All data/code/benchmark will be open once the paper gets accepted.");
+  }
+</script>
+
+<style>
+  .scaled-video {
+    width: 70vw; /* 占据视口宽度的 70% */
+    height: 70vh; /* 占据视口高度的 70% */
+    object-fit: contain; /* 保持视频内容完整，可能会有空白边 */
+    display: block; /* 使视频为块级元素，以便居中 */
+    margin: 0 auto; /* 水平居中对齐 */
+  }
+ .overlay-text {
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+    margin-top: -20px; /* 仅调整顶部间距 */
+    margin-left: auto;
+    margin-right: auto; /* 水平居中 */
+}
+</style>
+
+  <style>
+  .scaled-video-large {
+    width: 80vw; /* 占据视口宽度的 70% */
+    height: auto; /* 占据视口高度的 70% */
+    object-fit: contain; /* 保持视频内容完整，可能会有空白边 */
+    display: block; /* 使视频为块级元素，以便居中 */
+    margin: 0 auto; /* 水平居中对齐 */
+  }
+ .overlay-text {
+    text-align: center;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+    margin-top: 10px; /* 仅调整顶部间距 */
+    margin-left: auto;
+    margin-right: auto; /* 水平居中 */
+}
+</style>
+
+<style>
+  /* 视频样式 */
+  .video-element {
+    width: 90vw; /* 占据视口宽度的90% */
+    height: auto; /* 保持视频宽高比 */
+    margin: 0 auto; /* 水平居中 */
+    display: block;
+  }
+
+  /* 调整视频说明的样式 */
+  figcaption {
+    font-size: 1.3em;
+    margin-top: 10px;
+    color: #555;
+    text-align: center;
+  }
+</style>
+
+<style>
+  /* 视频样式 */
+  .video-rec {
+    width: 50vw; /* 占据视口宽度的90% */
+    height: auto; /* 保持视频宽高比 */
+    margin: 0 auto; /* 水平居中 */
+    display: block;
+  }
+
+  /* 调整视频说明的样式 */
+  figcaption {
+    font-size: 1.3em;
+    margin-top: 10px;
+    color: #555;
+    text-align: center;
+  }
+</style>
+
+
+
+
+
+<style>
+  /* 图像样式 */
+  .image-element {
+    width: 90vw; /* 占据视口宽度的90% */
+    height: auto; /* 保持图像宽高比 */
+    margin: 0 auto; /* 水平居中 */
+    display: block;
+  }
+
+  /* 调整图像说明的样式 */
+  .caption-text {
+    max-width: 90vw; /* 限制文字宽度与图像一致 */
+    font-size: 1.3em; /* 调整字体大小 */
+    margin-bottom: 10px; /* 与图像的间距 */
+    color: #555; /* 文字颜色 */
+    text-align: left; /* 左对齐文字 */
+    word-wrap: break-word; /* 防止文字超出范围 */
+    overflow-wrap: break-word; /* 增强兼容性 */
+  }
+
+  /* 图像容器样式 */
+  .image-container {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    align-items: center; /* 水平居中 */
+    text-align: center; /* 容器内文字居中 */
+  }
+</style>
+
+<style>
+  /* 视频样式 */
+  .video-element {
+    width: 90vw; /* 占据视口宽度的90% */
+    height: auto; /* 保持视频宽高比 */
+    margin: 0 auto; /* 水平居中 */
+    display: block;
+  }
+
+  /* 调整视频说明的样式 */
+  figcaption {
+    font-size: 1.3em; /* 调整字体大小 */
+    margin-bottom: 10px; /* 与视频间距 */
+    color: #555; /* 文本颜色 */
+    text-align: left; /* 左对齐文字 */
+  }
+
+  /* 视频容器样式 */
+  .video-container {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    align-items: center; /* 水平居中 */
+    text-align: center; /* 容器内文字居中 */
+  }
+
+  /* 确保文字宽度与视频一致 */
+  .video-container figcaption {
+    width: 90vw; /* 与视频宽度一致 */
+    margin: 0 auto 10px auto; /* 保持水平居中 */
+  }
+</style>
+
+
+<hr class="gradient-divider">
+
+<style>
+  .gradient-divider {
+    border: none; /* 移除默认边框 */
+    height: 6px; /* 设置分隔线粗细 */
+    background: linear-gradient(to right, red, orange, yellow, violet); /* 彩虹渐变颜色 */
+    margin: 20px 0; /* 上下间距 */
+    border-radius: 3px; /* 圆角效果 */
+  }
+</style>
+<hr class="gradient-divider">
+
+<h2 class="title is-3 colorful-title">     Introduction</h2>
+  
+  <section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption> 
+        Visual motion perception and estimation are vital for both living beings and AI agents to navigate and interact with the dynamic world. 
+        These abilities support key tasks such as navigation, tracking, prediction, and pursuit.
+
+      </figcaption>
+      <video class="video-element" autoplay loop muted playsinline>
+        <source src="./data_for_website/1_intro.mp4" type="video/mp4">
+        Your browser does not support video tags.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+
+<hr class="section-divider">
+  
+
+  <section class="section">
+  <div class="container">
+    <div class="video-container-horizontal">
+      <!-- 左侧文字 -->
+      <div class="caption-container">
+        <figcaption>
+          Recent advances in deep learning have pushed machine vision capabilities to rival or even surpass human performance in many visual tasks, including visual motion estimation. 
+         While state-of-the-art (SOTA) models achieve remarkable accuracy in calculating ground-truth optical flow, they lack alignment with human motion perception. 
+         Structurally, human motion perception involves complex spatiotemporal dynamics, whereas current CV models primarily focus on frame-to-frame correspondence. 
+         This design prioritization often ignores neurophysiological plausibility. Perceptually, CV models struggle to replicate human motion perception, 
+         failing under experimental variations, misinterpreting visual illusions, and overlooking inherent human biases.
+         The right examples illustrate motion integration with depth cues and the Mario reverse-phi illusion, results generated from RAFT-sintel.
+
+        </figcaption>
+      </div>
+     
+      <div class="video-container">
+        <video class="video-left" autoplay loop muted playsinline>
+          <source src="./data_for_website/2_gap_1.mp4" type="video/mp4">
+          Your browser does not support video tags.
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 容器布局样式 */
+  .video-container-horizontal {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 100vw; /* 允许子元素扩展到视口宽度 */
+  }
+
+  /* 左侧文字样式 */
+  .caption-container figcaption {
+    font-size: 1.1em;
+    color: #555;
+    text-align: justify;
+    max-width: 85%; /* 限制文字宽度 */
+    margin: 0;
+  }
+
+  /* 右侧视频样式 */
+  .video-left {
+    flex-grow: 1; /* 视频占用剩余空间 */
+    max-width: 35vw; /* 视频最大宽度 */
+    height: auto;
+    display: block;
+  }
+</style>
+
+
+<hr class="gradient-divider">
+
+  <section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption>
+       Among the many gaps between CV models and human perception, second-order motion processing stands out as a significant challenge. 
+        Humans perceive these two stimuli as having similar speeds and directions despite their differences in frequency space.
+        Fourier analysis reveals that first-order motion exhibits asymmetric energy in the Fourier domain, 
+        whereas second-order motion lacks detectable energy, making it invisible to classical analysis. Mechanistically, 
+        humans employ distinct processing channels for second-order motion, but CV models fail to account for this.
+        As a result, CV models struggle with such motion, producing noise-like responses due to their reliance on pixel correspondence and brightness consistency—features that second-order motion often lacks.
+        
+
+      </figcaption>
+      <video class="video-element" autoplay loop muted playsinline>
+        <source src="./data_for_website/2_gap_2.mp4" type="video/mp4">
+        Your browser does not support video tags.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+
+
+
+<hr class="gradient-divider">
+
+  <!-- 摘要部分 -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <!-- 论文摘要内容，可以自行替换 -->
+          <p>
+           The objective of this study is to develop machines that naturally learn to perceive visual motion as humans do. 
+            While recent advances in computer vision (CV) have enabled DNN-based models to accurately estimate optical flow in naturalistic images, 
+            a significant disparity remains between CV models and the biological visual system in both architecture and behavior. 
+            This disparity includes humans' ability to perceive the motion of higher-order image features (second-order motion), 
+            which many CV models fail to capture due to their reliance on the intensity conservation law. 
+            Our model architecture mimics the cortical V1-MT motion processing pathway, utilizing a trainable motion energy sensor bank and a recurrent self-attention network. 
+            Supervised learning on diverse naturalistic movies allows the model to replicate psychophysical and physiological findings about first-order (luminance-based) motion perception. 
+            For second-order motion, inspired by neuroscientific findings, the model includes an additional sensing pathway with nonlinear preprocessing before motion energy sensing, 
+            implemented using a simple multi-layer 3D CNN block. 
+            To explore how the brain naturally acquires second-order motion perception in natural environments---where pure second-order signals are rare---we hypothesized 
+            that second-order mechanisms are critical for estimating robust object motion amidst optical fluctuations, such as highlights on glossy surfaces. 
+            We trained our dual-pathway model on novel motion datasets with varying material properties of moving objects and found that 
+            training to estimate motion for non-Lambertian materials naturally endowed the model with the ability to perceive second-order motion, 
+            akin to humans. The resulting model effectively aligns with biological systems while generalizing to both first- and second-order motion phenomena in natural scenes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<hr class="gradient-divider">
+<h2 class="title is-3 colorful-title">     Two-Stages-Dual-Channel Model Design</h2>
+<section class="section">
+  <div class="container">
+    <figure class="image-container">
+      <figcaption>
+      Our prototype model employs a two-stage motion processing architecture, combining classical motion energy (ME) sensors in Stage I with deep neural networks (DNNs) in Stage II.
+        Stage I captures local motion energy, mimicking the function of the V1 area, while Stage II handles global motion integration and segregation, simulating the MT area.
+The red route in the figure represents classical first-order motion processing. 
+        Specifically, we implemented 256 trainable ME units using quadrature 2D Gabor spatial filters and temporal filters to capture spatiotemporal motion energies within a multi-scale wavelet space. 
+        This channel is specialized for first-order motion.
+To process higher-order motion, we introduced an alternative pathway, depicted by the gray route, which employs multi-layer 3D CNNs before motion energy computation. 
+        This design draws inspiration from human vision research, which suggests distinct mechanisms for first- and second-order motion processing.
+      </figcaption>
+      <img src="./data_for_website/3_model_1.png"  class="image-element">
+    </figure>
+  </div>
+</section>
+
+  <hr class="section-divider">
+
+  <section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption>
+        The second stage, which mimics the middle temporal cortex (MT), addresses motion integration and segregation. 
+        We introduce a graph network to construct a motion graph of a dynamic scene, enabling flexible connections between local motion elements and recurrent global motion integration. 
+        Efficient motion integration aside, the motion graph implicitly encodes object interconnections in a graph topology. 
+        Training-free graph cuts can be seamlessly applied for object-level segmentation. See below for The demo of the inferred motion flow field and instance generate from the the motion grah.
+      </figcaption>
+      <video class="video-element" autoplay loop muted playsinline>
+        <source src="./data_for_website/3_model_2.mp4" type="video/mp4">
+        Your browser does not support video tags.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+
+<hr class="gradient-divider">
+<h2 class="title is-3 colorful-title">    Dataset</h2>
+
+<section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption>
+      Given the computational capabilities of neural networks, it is theoretically feasible for a modified model to detect second-order motion after sufficient training on artificial second-order motion stimuli. 
+        However, such training is impractical in natural environments where pure second-order motion rarely occurs. This raises a critical scientific question: 
+        How and why does the biological visual system naturally acquire the ability to perceive second-order motion?
+        What kind of functionality/ advantage does second-order motion perception provide to our visual system?
+
+We hypothesize that second-order motion perception assists in estimating the motion of objects with varying material properties.
+       
+        As shown in the video below, materials have distinct reflection and transmission characteristics, such as diffuse, transmission, 
+        and specular.
+Diffuse materials exhibit reliable luminance flow due to adherence to the constant brightness assumption.
+        Local brightness shifts in Diffuse materials closely correspond to actual object motion, enabling effective detection by first-order motion detectors.
+In contrast, materials with non-diffuse reflections, such as those with transmission or specular properties,
+        generate unpredictable optical turbulence or noise on the surface. 
+        These disturbances disrupt local luminance shifts, making them unreliable for inferring object motion 
+        and challenging first-order motion systems. Despite this, humans can accurately perceive the motion of non-diffuse objects. 
+        We propose that the human visual system compensates for this limitation 
+        by employing higher-order motion processing, such as second-order motion perception,
+        to estimate object motion even in the presence of optical turbulence.
+
+
+      </figcaption>
+      <video class="video-element" autoplay loop muted playsinline>
+        <source src="./data_for_website/4_dataset_1.mp4" type="video/mp4">
+        Your browser does not support video tags.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+<hr class="section-divider">
+  <section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption>
+        To test our hypothesis, we created a motion dataset with materials categorized into diffuse and non-diffuse groups.
+        This dataset simulates a biological agent interacting in diverse environments, allowing us to investigate whether material properties influence second-order motion perception.
+        After supervised training on videos with labeled object motion, the model learned to disregard optical turbulence and accurately detect motion in non-diffuse materials.
+        Notably, agents trained on non-diffuse datasets demonstrated human-like second-order motion perception, suggesting that exposure to such stimuli naturally facilitates second-order motion recognition.
+      </figcaption>
+      <video class="video-element" autoplay loop muted playsinline>
+        <source src="./data_for_website/4_dataset_2.mp4" type="video/mp4">
+        Your browser does not support video tags.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+
+<hr class="section-divider">
+  <section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption>
+       Our next step is to quantify the ability of second-order motion perception by comparing motion estimation performance between humans and models using the same datasets.
+        However, no standard dataset currently provides diverse and realistic second-order motion samples. 
+        To address this, we developed a novel dataset that integrates second-order motion into naturalistic backgrounds with various modulations, including water wave dynamics and swirl patterns, as shown in the video.     
+      </figcaption>
+      <video class="video-rec" autoplay loop muted playsinline>
+        <source src="./data_for_website/4_dataset_3.mp4" type="video/mp4">
+        Your browser does not support video tags.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+
+
+
+  
+  
+<hr class="section-divider">
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <!-- 描述文字 -->
+      <p class="has-text-centered is-size-5 mb-4">Swipe to browse more examples of second-order motion</p>
+
+      <div id="results-carousel" class="carousel results-carousel">
+        <!-- 每个视频项目 -->
+        <div class="item">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="./data_for_website/MyVideo_3.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="./data_for_website/MyVideo_4.mp4" type="video/mp4">
+          </video>
+        </div>
+    
+        <div class="item">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="./data_for_website/MyVideo_5.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="./data_for_website/MyVideo_6.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="./data_for_website/MyVideo_7.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item">
+          <video autoplay controls muted loop playsinline height="100%">
+            <source src="./data_for_website/MyVideo_8.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* 样式用于让描述文字居中并适应页面风格 */
+  .has-text-centered {
+    text-align: center;
+  }
+  .is-size-5 {
+    font-size: 1.3em;
+  }
+  .mb-4 {
+    margin-bottom: 1.5rem;
+  }
+</style>
+
+<hr class="gradient-divider">
+<h2 class="title is-3 colorful-title">    Human Experiment</h2>
+
+  <section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption>
+       Using this second-order dataset, we employed a psychophysical method to collect human-perceived second-order motion vectors.
+        In our experiment, participants sat in front of a monitor and used a mouse to control moving noise, aligning it with the second-order motion they perceived. 
+        Stimuli were repeated multiple times to allow sufficient time for inference.
+
+Our results revealed a strong correlation between the physical ground truth (GT) and human responses in detecting second-order motion (r=0.983, SD=0.005). 
+        In contrast, the correlation for a representative CV model, RAFT, was much lower (r=0.102) and remained unimproved even after training on the non-diffuse dataset due to structural limitations. 
+        Training our dual-channel model with non-diffuse materials significantly enhanced its ability to recognize second-order motion, achieving an average correlation of 0.902, closely matching human perception.
+        
+      </figcaption>
+      <video class="video-element" autoplay loop muted playsinline>
+        <source src="./data_for_website/4_dataset_4.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+
+
+
+<hr class="gradient-divider">
+<h2 class="title is-3 colorful-title">    Scientific Hypothesis</h2>
+
+  <hr class="section-divider">
+  <section class="section">
+  <div class="container has-text-centered">
+    <figure>
+      <figcaption>
+One of the primary goals of the motion perception system is to reliably infer an object’s motion. However, optical turbulence in natural environments often renders first-order motion estimation unreliable.
+        Observing that second-order motion perception is closely linked to handling optical turbulence, we hypothesize that natural environments drive the visual system to develop mechanisms to counteract such turbulence and noise. 
+        This adaptive process may have, at least partially, contributed to the evolution of second-order motion perception.
+
+      </figcaption>
+      <video class="video-rec" autoplay loop muted playsinline>
+        <source src="./data_for_website/5_conclu.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      
+    </figure>
+  </div>
+</section>
+
+
+<hr class="gradient-divider">
+<h2 class="title is-3 colorful-title">    More Demos </h2>
+  
+<!-- Teaser 主视频展示 -->
+<section class="hero teaser">
+  <video id="teaser" autoplay muted loop playsinline class="scaled-video">
+    <source src="./data_for_website/6_firsec_2.mp4" type="video/mp4">
+     Your browser does not support video tags.
+  </video>
+
+  
+  <h2 class="subtitle has-text-centered overlay-text">
+   We presented examples from natural environments to support our argument, such as water flowing in a river or a moving box with fluctuating water. 
+    While humans perceive the local optical noise caused by fluctuating water, we can also infer the global motion direction of the flow. This ability is closely tied to the functionality of second-order motion perception.
+
+Although isolated second-order motion is rarely observed in nature, it often coexists with first-order motion as optical fluctuations. 
+    We propose that integrating first- and second-order motion could enhance the stability and reliability of the visual system in complex and noisy environments.
+
+  </h2>
+</section>
+
+  
+<hr class="section-divider">
+
+  <!-- Teaser 主视频展示 -->
+<section class="hero teaser">
+  <video id="teaser" autoplay muted loop playsinline class="scaled-video">
+    <source src="./data_for_website/6_firsec.mp4" type="video/mp4">
+     Your browser does not support video tags.
+  </video>
+
+  
+  <h2 class="subtitle has-text-centered overlay-text">
+The figure above illustrates the segmentation results for both natural scenes and pure drift-balanced motion. 
+    The higher-order channel significantly enhances the model’s ability to identify objects in motion, producing finer segmentation compared to using the first-order channel alone. 
+    This advantage becomes particularly evident in noisy environments.
+
+On the left, we demonstrate that our framework can identify objects based purely on motion, even when they are spatially indistinct. 
+    The dual-channel model shows a significant advantage over the single first-order channel in handling such scenarios.
+  </h2>
+</section>
+
+
+    
+<hr class="section-divider">
+  <!-- Teaser 主视频展示 -->
+<section class="hero teaser">
+  <video id="teaser" autoplay muted loop playsinline class="scaled-video-large">
+    <source src="./data_for_website/6_firsec_3.mp4" type="video/mp4">
+     Your browser does not support video tags.
+  </video>
+
+  <h2 class="subtitle has-text-centered overlay-text">
+   We presented additional results on first-order motion-based stimuli and illusions, including reverse phi, missing fundamental illusion, motion-adaptive pooling, and layer/form cues-induced motion integration. 
+    These examples highlight the intricate mechanisms underlying first-order motion perception and its role in complex visual scenarios.
+
+  </h2>
+</section>
+
+
+  
+
+<hr class="gradient-divider">
+
+<!-- 参考文献 BibTeX 格式 -->
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>
+      @misc{sun2025machinelearningmodelingmultiorder,
+      title={Machine Learning Modeling for Multi-order Human Visual Motion Processing}, 
+      author={Zitang Sun and Yen-Ju Chen and Yung-Hao Yang and Yuan Li and Shin'ya Nishida},
+      year={2025},
+      eprint={2501.12810},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2501.12810}, 
+}
+    </code></code></pre>
+  </div>
+</section>
+
+<!-- 页脚部分 -->
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <!-- 链接到PDF文件 -->
+      <a class="icon-link" href="./static/paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <!-- GitHub图标及链接 -->
+      <a class="icon-link" href="xxx" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+      
+          <p>
+            This website is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
